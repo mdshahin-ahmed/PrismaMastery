@@ -47,6 +47,7 @@ const filtering = async () => {
       ],
     },
   });
+
   const startWithFiltering = await prisma.user.findMany({
     where: {
       email: {
@@ -54,7 +55,51 @@ const filtering = async () => {
       },
     },
   });
-  console.log(startWithFiltering);
+
+  const endsWithFiltering = await prisma.user.findMany({
+    where: {
+      email: {
+        endsWith: ".com",
+      },
+    },
+  });
+
+  const equalWithFiltering = await prisma.user.findMany({
+    where: {
+      email: {
+        equals: "user1@yopmail.com",
+      },
+    },
+  });
+
+  const userNameArray = ["user1", "user2", "user3"];
+
+  const userNamesArray = await prisma.user.findMany({
+    where: {
+      username: {
+        in: userNameArray,
+      },
+    },
+  });
+
+  const inDepthData = await prisma.user.findUnique({
+    where: {
+      id: 3,
+    },
+    include: {
+      post: {
+        include: {
+          postCategory: {
+            include: {
+              category: true,
+            },
+          },
+        },
+      },
+    },
+  });
+
+  console.dir(inDepthData, { depth: Infinity });
 };
 
 filtering();
