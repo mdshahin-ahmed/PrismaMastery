@@ -18,9 +18,12 @@ const aggregates = async () => {
   });
 
   // find count of age fields using aggregate -> required number field
-  const countAge = await prisma.user.aggregate({
+  const countAge = await prisma.post.aggregate({
     _count: {
-      age: true,
+      title: true,
+    },
+    where: {
+      published: true,
     },
   });
 
@@ -41,7 +44,7 @@ const aggregates = async () => {
     },
   });
 
-  console.log(minAge);
+  console.log(countAge);
 };
 
 aggregates();
